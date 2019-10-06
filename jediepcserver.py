@@ -218,6 +218,17 @@ class JediEPCHandler(object):
             ))
         return reply
 
+    def complete_lightweight(self, *args):
+        reply = []
+        for comp in self.jedi_script(*args).completions():
+            reply.append(dict(
+                word=comp.name,
+                doc="",
+                description="",
+                symbol="",
+            ))
+        return reply
+
     def get_in_function_call(self, *args):
         sig = self.jedi_script(*args).call_signatures()
         call_def = sig[0] if sig else None
@@ -431,6 +442,7 @@ def jedi_epc_server(
     )
     server = epc.server.EPCServer((address, port))
     server.register_function(handler.complete)
+    server.register_function(handler.complete_lightweight)
     server.register_function(handler.get_in_function_call)
     server.register_function(handler.goto)
     server.register_function(handler.related_names)

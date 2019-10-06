@@ -685,6 +685,14 @@ See: https://github.com/tkf/emacs-jedi/issues/54"
     (lambda (reply)
       (setq jedi:complete-reply reply))))
 
+(defun jedi:complete-lightweight-request ()
+  "Request ``Script(...).complete`` and return a deferred object.
+`jedi:complete-reply' is set to the reply sent from the server."
+  (setq jedi:complete-request-point (point))
+  (deferred:nextc (jedi:call-deferred 'complete_lightweight)
+    (lambda (reply)
+      (setq jedi:complete-reply reply))))
+
 
 ;;; Call signature (get_in_function_call)
 
